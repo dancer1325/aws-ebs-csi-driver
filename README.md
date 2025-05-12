@@ -2,23 +2,41 @@
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/kubernetes-sigs/aws-ebs-csi-driver)](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kubernetes-sigs/aws-ebs-csi-driver)](https://goreportcard.com/report/github.com/kubernetes-sigs/aws-ebs-csi-driver)
 
-> [!CAUTION]
-> ## [Deprecation announcement] AWS Snow Family device support for the EBS CSI Driver
-> Support for the EBS CSI Driver on [AWS Snow Family devices](https://aws.amazon.com/snowball/) is deprecated, effective immediately. No further Snow-specific bugfixes or feature requests will be merged. The existing functionality for Snow devices will be removed in the 1.44 release of the EBS CSI Driver. This announcement does not affect the support of the EBS CSI Driver on other platforms, such as [Amazon EC2](https://aws.amazon.com/ec2/) or EC2 on [AWS Outposts](https://aws.amazon.com/outposts/). For any questions related to this announcement, please comment on this issue [#2365](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/issues/2365) or open a new issue.
-
+* ⚠️EBS CSI Driver support | [AWS Snow Family devices](https://aws.amazon.com/snowball/) is deprecated ⚠️
+  * NO further Snow-specific bugfixes OR feature requests
+  * | v1.44, EXISTING functionality / Snow devices -- will be -- removed 
+  * NOT affect the support | OTHER platforms
+    * _Example:_ [Amazon EC2](https://aws.amazon.com/ec2/) OR [AWS Outposts](https://aws.amazon.com/outposts/)
+  * see [#2365](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/issues/2365)
 
 ## Overview
 
-The [Amazon Elastic Block Store](https://aws.amazon.com/ebs/) Container Storage Interface (CSI) Driver provides a [CSI](https://github.com/container-storage-interface/spec/blob/master/spec.md) interface used by Container Orchestrators to manage the lifecycle of Amazon EBS volumes.
+* provides a [CSI](https://github.com/container-storage-interface/spec/blob/master/spec.md) 
+  * used by Container Orchestrators -- to -- manage the lifecycle of Amazon EBS volumes
 
 ## Features
-* **Static Provisioning** - Associate an externally-created EBS volume with a [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV) for consumption within Kubernetes.
-* **Dynamic Provisioning** - Automatically create EBS volumes and associated [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV) from [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic)) (PVC). Parameters can be passed via a [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource) for fine-grained control over volume creation.
-* **Mount Options** - Mount options could be specified in the [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV) resource to define how the volume should be mounted.
-* **Block Volumes** - Consume an EBS volume as a [raw block device](https://kubernetes-csi.github.io/docs/raw-block.html).
-* **Volume Snapshots** - Create and restore [snapshots](https://kubernetes.io/docs/concepts/storage/volume-snapshots/) taken from a volume in Kubernetes.
-* **Volume Resizing** - Expand the volume by specifying a new size in the [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims) (PVC).
-* **Volume Modification** - Change the properties (type, iops, or throughput) [via a `VolumeAttributesClass`](examples/kubernetes/modify-volume).
+* **Static Provisioning**
+  * EXTERNALLY-created EBS volume -- is associated with a -- [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV) / 
+    * used | Kubernetes
+* **Dynamic Provisioning**
+  * AUTOMATICALLY
+    * create EBS volumes
+      * if you want fine-grained control -> pass -- , via [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource), -- parameters 
+    * EBS volumes, from [PersistentVolumeClaims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#dynamic)) (PVC) -- are associated to -- [PersistentVolumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV)
+* **Mount Options**
+  * specified | [PersistentVolume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PV)
+* **Block Volumes** 
+  * == EBS volume -- are consumed as a -- [raw block device](https://kubernetes-csi.github.io/docs/raw-block.html)
+* **Volume Snapshots** 
+  * == [Kubernetes volume snapshots](https://kubernetes.io/docs/concepts/storage/volume-snapshots/)
+  * are
+    * created
+    * restored 
+* **Volume Resizing**
+  * -- by -- specifying a NEW size | [PersistentVolumeClaim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#expanding-persistent-volumes-claims) (PVC)
+* **Volume Modification**
+  * == change properties (type, iops, or throughput) 
+  * -- via -- [`VolumeAttributesClass`](examples/kubernetes/modify-volume)
 
 ## Container Images
 
@@ -29,27 +47,34 @@ The [Amazon Elastic Block Store](https://aws.amazon.com/ebs/) Container Storage 
 
 ## Releases
 
-The EBS CSI Driver publishes monthly releases. Unscheduled releases may be published for patches to security vulnerabilities and other fixes deemed urgent.
+* monthly releases
+  * MINIMUM, a `MINOR` version bump
+* unscheduled releases
+  * use cases
+    * patches to security vulnerabilities
 
-The EBS CSI Driver follows [semantic versioning](https://semver.org/). The version will be bumped following the rules below:
-
-* Significant breaking changes will be released as a `MAJOR` update.
-* New features will be released as a `MINOR` update.
-* Bug or vulnerability fixes will be released as a `PATCH` update.
-
-Monthly releases will contain at minimum a `MINOR` version bump, even if the content would normally be treated as a `PATCH` version.
+* follows [semantic versioning](https://semver.org/)
+  * SIGNIFICANT breaking changes -> `MAJOR` update
+  * NEW features -> `MINOR` update
+  * Bug or vulnerability fixes -> `PATCH` update
 
 ## Support
 
-Support will be provided for the latest version and one prior version. Bugs or vulnerabilities found in the latest version will be backported to the previous release in a new minor version.
+* | 
+  * latest version
+  * latest -1 version 
+* bugs or vulnerabilities | latest version,
+  * | latest -1, backported -- via -- NEW minor version
 
-This policy is non-binding and subject to change.
+* this support policy can change
 
 ## Compatibility
 
-The EBS CSI Driver is compatible with all Kubernetes versions supported by [the Kubernetes project](https://kubernetes.io/releases/) and/or [Amazon EKS (including extended support versions)](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html).
+* compatible with ALL Kubernetes versions -- supported by --
+  * [Kubernetes project](https://kubernetes.io/releases/) & / OR
+  * [Amazon EKS (including extended support versions)](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html)
 
-The EBS CSI Driver implements the [Container Storage Interface specification](https://github.com/container-storage-interface/spec/blob/master/spec.md) version `v1.9.0`.
+* EBS CSI Driver implements the [Container Storage Interface specification](https://github.com/container-storage-interface/spec/blob/master/spec.md) `v1.9.0`
 
 ## Documentation
 
